@@ -849,7 +849,7 @@ h2 span {
   overflow: hidden;
   background-color: #dce7df;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
 }
@@ -858,6 +858,7 @@ h2 span {
 }
 .journey-tile:last-child {
   grid-column: 2 / span 2;
+  background-position: center top;
 }
 .journey-tile::after {
   content: "";
