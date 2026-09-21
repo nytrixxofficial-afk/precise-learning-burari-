@@ -1,69 +1,695 @@
+"use client";
+
+import { FormEvent, useState } from "react";
 import Image from "next/image";
+import {
+  ArrowRight,
+  Atom,
+  Award,
+  BookOpen,
+  Check,
+  ChevronDown,
+  FlaskConical,
+  GraduationCap,
+  Lightbulb,
+  MapPin,
+  Menu,
+  MessageCircle,
+  Microscope,
+  Phone,
+  Play,
+  Quote,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Users,
+  X,
+} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+
+const phone = "+918882731685";
+const locationUrl = "https://share.google/ERIoC0liW7uHWkZ3r";
+const gallery = [
+  [
+    "A focused classroom session",
+    "/gallery-classroom.jpg",
+  ],
+  [
+    "Learning together",
+    "/gallery-learning.jpg",
+  ],
+  [
+    "A space to do your best",
+    "/about-teacher.jpg",
+  ],
+  [
+    "Curious minds at work",
+    "/gallery-curious.jpg",
+  ],
+];
+const subjects = [
+  ["Mathematics", "Build problem-solving instincts.", <Atom size={22} />],
+  ["Science", "Make the world make sense.", <FlaskConical size={22} />],
+  ["Physics", "Think in principles, not formulas.", <Lightbulb size={22} />],
+  ["Chemistry", "Connect reactions to reality.", <Microscope size={22} />],
+  ["English", "Write with clarity and confidence.", <BookOpen size={22} />],
+  [
+    "Social Science",
+    "Learn the stories behind facts.",
+    <GraduationCap size={22} />,
+  ],
+];
+
+function Logo() {
+  return (
+    <a href="#top" className="logo" aria-label="Precise Learning home">
+      <Image
+        className="logo-image"
+        src="/precise-learning-logo.png"
+        alt="Precise Learning eagle logo"
+        width={44}
+        height={44}
+        priority
+      />
+      <span className="logo-copy">
+        PRECISE <b>LEARNING</b>
+        <small>BURARI · NEW DELHI</small>
+      </span>
+    </a>
+  );
+}
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState("");
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    if (!form.get("name") || !form.get("phone")) {
+      setFormError("Please add your name and phone number.");
+      return;
+    }
+    setFormError("");
+    setSubmitted(true);
+    event.currentTarget.reset();
+  }
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main id="top">
+      <div className="announcement">
+        <span>Admissions open for the 2026-27 academic year</span>
+        <a href="#enquire">
+          Book a free counselling call <ArrowRight size={14} />
+        </a>
+      </div>
+      <nav className="navbar">
+        <div className="container nav-inner">
+          <Logo />
+          <div className={`nav-links ${menuOpen ? "is-open" : ""}`}>
+            <a href="#about" onClick={() => setMenuOpen(false)}>
+              About
+            </a>
+            <a href="#courses" onClick={() => setMenuOpen(false)}>
+              Courses
+            </a>
+            <a href="#approach" onClick={() => setMenuOpen(false)}>
+              Our approach
+            </a>
+            <a href="/notes" onClick={() => setMenuOpen(false)}>
+              Notes portal
+            </a>
+            <a href="#contact" onClick={() => setMenuOpen(false)}>
+              Contact
+            </a>
+          </div>
+          <div className="nav-actions">
+            <a className="phone-link" href={`tel:${phone}`}>
+              <Phone size={16} /> <span>+91 88827 31685</span>
+            </a>
+            <a href="/notes" className="button button-notes button-small">
+              Get Notes <ArrowRight size={15} />
+            </a>
+            <a href="#enquire" className="button button-dark button-small">
+              Enquire now <ArrowRight size={15} />
+            </a>
+            <button
+              className="menu-button"
+              aria-label="Toggle menu"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              {menuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+      </nav>
+      <section className="hero">
+        <div className="hero-grid container">
+          <div className="hero-copy">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="eyebrow"
+            >
+              <span className="eyebrow-dot" /> Intentional learning. Measurable
+              growth.
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              Where better
+              <br />
+              <em>thinking</em> begins.
+            </motion.h1>
+            <p className="hero-text">
+              A focused learning space in Burari where students build strong
+              fundamentals, genuine confidence and the habits to go further.
+            </p>
+            <div className="hero-ctas">
+              <a className="button button-accent" href="#enquire">
+                Start your journey <ArrowRight size={17} />
+              </a>
+              <a className="button button-notes" href="/notes">
+                Get Notes <BookOpen size={16} />
+              </a>
+              <a className="text-link" href="#about">
+                <span className="play-icon">
+                  <Play size={12} fill="currentColor" />
+                </span>{" "}
+                See how we teach
+              </a>
+            </div>
+            <div className="trust-row">
+              <span>
+                <ShieldCheck size={16} /> Parent-trusted
+              </span>
+              <span>
+                <Award size={16} /> Result-focused
+              </span>
+              <span>
+                <Users size={16} /> Small batches
+              </span>
+            </div>
+          </div>
+          <div className="hero-visual">
+            <div
+              className="hero-image"
+              role="img"
+              aria-label="Students studying together in a classroom"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="hero-sticker">
+              <span className="sticker-number">
+                9<span>+</span>
+              </span>
+              <span>
+                years of
+                <br />
+                shaping futures
+              </span>
+            </div>
+          </div>
         </div>
-      </main>
+        <div className="hero-bottom container">
+          <span>Trusted by families across Burari</span>
+          <div className="line" />
+          <span className="scroll-hint">
+            Scroll to explore <ChevronDown size={15} />
+          </span>
+        </div>
+      </section>
+      <section id="about" className="section about-section">
+        <div className="container about-grid">
+          <div className="section-label">
+            01 <span>About us</span>
+          </div>
+          <div className="about-content">
+            <div className="about-heading">
+              <h2>
+                Clarity in teaching.
+                <br />
+                <span>Confidence in every student.</span>
+              </h2>
+              <p>
+                We are more than a tuition centre. We are a close-knit academic
+                community built around one belief: when a student understands
+                the why, the marks follow.
+              </p>
+            </div>
+            <div className="about-body">
+              <div
+                className="about-image"
+                role="img"
+                aria-label="Teacher guiding students in a modern classroom"
+              />
+              <div className="about-details">
+                <p>
+                  Precise Learning brings thoughtful teaching, consistent
+                  practice and personal attention to Classes 6–12. Our
+                  classrooms are designed for questions, not just answers.
+                </p>
+                <a className="text-link dark-link" href="#approach">
+                  Discover our approach <ArrowRight size={16} />
+                </a>
+                <div className="stat-row">
+                  <div>
+                    <strong>
+                      500<span>+</span>
+                    </strong>
+                    <small>students guided</small>
+                  </div>
+                  <div>
+                    <strong>
+                      94<span>%</span>
+                    </strong>
+                    <small>parent referrals</small>
+                  </div>
+                  <div>
+                    <strong>9</strong>
+                    <small>years of care</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="courses" className="section courses-section">
+        <div className="container">
+          <div className="section-intro">
+            <div className="section-label">
+              02 <span>Learning paths</span>
+            </div>
+            <div>
+              <h2>
+                The right rhythm
+                <br />
+                <span>for every stage.</span>
+              </h2>
+            </div>
+            <p>
+              Focused programmes that meet students where they are and move them
+              forward with purpose.
+            </p>
+          </div>
+          <div className="course-grid">
+            <CourseCard
+              number="01"
+              title="Foundation"
+              classes="Classes 6–8"
+              text="Build the curiosity, core concepts and study habits that make future learning easier."
+              tone="mint"
+            />
+            <CourseCard
+              number="02"
+              title="Momentum"
+              classes="Classes 9–10"
+              text="Turn fundamentals into exam confidence with structured practice and feedback."
+              tone="yellow"
+            />
+            <CourseCard
+              number="03"
+              title="Direction"
+              classes="Classes 11–12"
+              text="Go deeper, think sharper and prepare for board exams with a clear plan."
+              tone="coral"
+            />
+          </div>
+        </div>
+      </section>
+      <section className="section subjects-section">
+        <div className="container">
+          <div className="section-heading-row">
+            <div>
+              <div className="section-label">
+                03 <span>What we teach</span>
+              </div>
+              <h2>
+                Strong subjects.
+                <br />
+                <span>Stronger foundations.</span>
+              </h2>
+            </div>
+            <p>
+              Our teachers make each subject feel less like a hurdle and more
+              like a skill worth owning.
+            </p>
+          </div>
+          <div className="subject-grid">
+            {subjects.map(([title, text, icon]) => (
+              <div className="subject-card" key={title as string}>
+                <div className="subject-icon">{icon}</div>
+                <h3>{title as string}</h3>
+                <p>{text as string}</p>
+                <ArrowRight size={17} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section id="approach" className="section approach-section">
+        <div className="container">
+          <div className="approach-head">
+            <div className="section-label">
+              04 <span>Our approach</span>
+            </div>
+            <h2>
+              Progress is a process.
+              <br />
+              <em>We make it visible.</em>
+            </h2>
+            <p>
+              Good learning is not a single breakthrough. It is a sequence of
+              small, supported wins.
+            </p>
+          </div>
+          <div className="timeline">
+            <Step
+              number="01"
+              icon={<Lightbulb />}
+              title="Understand"
+              text="We start with the why, using simple explanations and real-world connections."
+            />
+            <Step
+              number="02"
+              icon={<BookOpen />}
+              title="Practice"
+              text="Guided examples become independent attempts, at exactly the right pace."
+            />
+            <Step
+              number="03"
+              icon={<Target />}
+              title="Test"
+              text="Regular, low-pressure checks reveal what is clear and what needs attention."
+            />
+            <Step
+              number="04"
+              icon={<Sparkles />}
+              title="Improve"
+              text="Feedback turns mistakes into a smarter plan for the next attempt."
+            />
+          </div>
+        </div>
+      </section>
+      <section className="section gallery-section">
+        <div className="container">
+          <div className="section-heading-row">
+            <div>
+              <div className="section-label">
+                05 <span>Inside Precise</span>
+              </div>
+              <h2>
+                A place where
+                <br />
+                <span>focus feels natural.</span>
+              </h2>
+            </div>
+            <p>
+              Take a peek at the warm, focused spaces where our students learn
+              every day.
+            </p>
+          </div>
+          <div className="gallery-grid">
+            {gallery.map(([caption, image], index) => (
+              <button
+                className={`gallery-tile gallery-${index + 1}`}
+                key={image}
+                onClick={() => setSelectedImage(image)}
+                aria-label={`Open image: ${caption}`}
+                style={{ backgroundImage: `url(${image})` }}
+              >
+                <span>{caption}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section testimonials-section">
+        <div className="container">
+          <div className="section-label">
+            06 <span>Words from families</span>
+          </div>
+          <div className="testimonial-layout">
+            <div>
+              <h2>
+                Progress worth
+                <br />
+                <em>talking about.</em>
+              </h2>
+              <div className="rating">
+                <span>★★★★★</span> <b>4.9 / 5</b>
+                <small>from our parent community</small>
+              </div>
+            </div>
+            <div className="quote-card">
+              <Quote size={38} />
+              <p>
+                “The biggest change was not just in my daughter’s marks. She
+                started raising her hand, asking questions and believing she
+                could solve difficult problems.”
+              </p>
+              <div className="quote-person">
+                <div className="avatar">A</div>
+                <span>
+                  <b>Mrs. Ananya Sharma</b>
+                  <small>Parent of a Class 10 student</small>
+                </span>
+              </div>
+              <div className="quote-dots">
+                <span className="active" />
+                <span />
+                <span />
+              </div>
+              <a
+                className="google-reviews-link"
+                href="https://share.google/6PNtQzLEaapsoxnjp"
+                target="_blank"
+                rel="noreferrer"
+              >
+                More reviews on Google <ArrowRight size={15} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="enquire" className="enquiry-section">
+        <div className="container enquiry-grid">
+          <div className="enquiry-copy">
+            <div className="section-label">
+              07 <span>Start a conversation</span>
+            </div>
+            <h2>
+              Let’s find the
+              <br />
+              <em>right next step.</em>
+            </h2>
+            <p>
+              Tell us a little about your child and we’ll get back to you with a
+              clear, no-pressure recommendation.
+            </p>
+            <div className="enquiry-contact">
+              <a href={`tel:${phone}`}>
+                <Phone size={17} /> +91 88827 31685
+              </a>
+              <a
+                href={`https://wa.me/${phone}?text=Hello%20Precise%20Learning%2C%20I%20would%20like%20to%20know%20more.`}
+              >
+                <MessageCircle size={17} /> WhatsApp us
+              </a>
+            </div>
+          </div>
+          <form className="enquiry-form" onSubmit={handleSubmit}>
+            {submitted ? (
+              <div className="success-state">
+                <div className="success-icon">
+                  <Check />
+                </div>
+                <h3>Thank you. We’ve got this.</h3>
+                <p>Our academic counsellor will call you shortly.</p>
+                <button
+                  type="button"
+                  className="text-link dark-link"
+                  onClick={() => setSubmitted(false)}
+                >
+                  Send another enquiry <ArrowRight size={15} />
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="form-row">
+                  <label>
+                    Parent / student name
+                    <input name="name" placeholder="Your name" />
+                  </label>
+                  <label>
+                    Phone number
+                    <input
+                      name="phone"
+                      type="tel"
+                      placeholder="10-digit mobile number"
+                    />
+                  </label>
+                </div>
+                <label>
+                  Class looking for
+                  <select name="class">
+                    <option>Choose a class</option>
+                    <option>Classes 6–8</option>
+                    <option>Classes 9–10</option>
+                    <option>Classes 11–12</option>
+                  </select>
+                </label>
+                <label>
+                  Anything you’d like us to know?{" "}
+                  <textarea
+                    name="message"
+                    placeholder="Optional message"
+                    rows={3}
+                  />
+                </label>
+                {formError && <p className="form-error">{formError}</p>}
+                <button className="button button-dark form-submit">
+                  Request a callback <ArrowRight size={16} />
+                </button>
+                <small>
+                  By submitting, you agree to receive a call from our team.
+                </small>
+              </>
+            )}
+          </form>
+        </div>
+      </section>
+      <section id="contact" className="contact-section">
+        <div className="container contact-grid">
+          <div>
+            <Logo />
+            <p className="contact-intro">
+              Thoughtful teaching for curious minds, right here in Burari.
+            </p>
+            <a
+              className="map-link"
+              href={locationUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MapPin size={17} /> Find us in Burari, Delhi{" "}
+              <ArrowRight size={15} />
+            </a>
+          </div>
+          <div className="contact-links">
+            <div>
+              <small>Talk to us</small>
+              <a href={`tel:${phone}`}>+91 88827 31685</a>
+              <a href="mailto:hello@preciselearning.in">
+                hello@preciselearning.in
+              </a>
+            </div>
+            <div>
+              <small>Explore</small>
+              <a href="#about">About us</a>
+              <a href="#courses">Courses</a>
+              <a href="/notes">Study notes</a>
+            </div>
+            <div>
+              <small>Follow along</small>
+              <a href="#contact">
+                Instagram
+              </a>
+              <a href="#contact">
+                YouTube
+              </a>
+            </div>
+          </div>
+        </div>
+        <footer className="container footer">
+          <span>© 2026 Precise Learning Burari. All rights reserved.</span>
+          <span>Made with care for better learning.</span>
+        </footer>
+      </section>
+      <a
+        className="whatsapp-float"
+        href={`https://wa.me/${phone}?text=Hello%20Precise%20Learning%2C%20I%20would%20like%20to%20enquire%20about%20classes.`}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Chat with Precise Learning on WhatsApp"
+      >
+        <MessageCircle size={23} />
+      </a>
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            className="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              aria-label="Close gallery"
+            >
+              <X />
+            </button>
+            <div
+              className="lightbox-image"
+              style={{ backgroundImage: `url(${selectedImage})` }}
+              onClick={(event) => event.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
+  );
+}
+function CourseCard({
+  number,
+  title,
+  classes,
+  text,
+  tone,
+}: {
+  number: string;
+  title: string;
+  classes: string;
+  text: string;
+  tone: string;
+}) {
+  return (
+    <article className={`course-card ${tone}`}>
+      <span className="card-number">{number}</span>
+      <span className="card-icon">
+        <GraduationCap size={23} />
+      </span>
+      <p>{classes}</p>
+      <h3>{title}</h3>
+      <div className="card-rule" />
+      <span>{text}</span>
+      <a href="#enquire" aria-label={`Enquire about ${title}`}>
+        <ArrowRight size={18} />
+      </a>
+    </article>
+  );
+}
+function Step({
+  number,
+  icon,
+  title,
+  text,
+}: {
+  number: string;
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="step">
+      <div className="step-top">
+        <span>{number}</span>
+        <div>{icon}</div>
+      </div>
+      <h3>{title}</h3>
+      <p>{text}</p>
     </div>
   );
 }
