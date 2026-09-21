@@ -35,6 +35,12 @@ const gallery = [
   ["A space to do your best", "/about-teacher.jpg"],
   ["Curious minds at work", "/gallery-curious.jpg"],
 ];
+const journeyGallery = [
+  ["The classroom that started it all", "/journey-2014-1.jpg"],
+  ["A teacher, always learning", "/journey-2014-2.jpg"],
+  ["Growing together", "/journey-2014-3.jpg"],
+  ["The people behind the journey", "/journey-2014-4.jpg"],
+];
 const subjects = [
   [
     "Mathematics",
@@ -433,10 +439,40 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="section journey-section">
+        <div className="container">
+          <div className="journey-heading">
+            <div>
+              <div className="section-label">
+                06 <span>Since 2014</span>
+              </div>
+              <h2>
+                Our journey,
+                <br />
+                <em>through the years.</em>
+              </h2>
+            </div>
+            <p>Where every photograph tells a story of our journey.</p>
+          </div>
+          <div className="journey-grid">
+            {journeyGallery.map(([caption, image]) => (
+              <button
+                className="journey-tile"
+                key={image}
+                onClick={() => setSelectedImage(image)}
+                aria-label={`Open image: ${caption}`}
+                style={{ backgroundImage: `url(${image})` }}
+              >
+                <span>{caption}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="section testimonials-section">
         <div className="container">
           <div className="section-label">
-            06 <span>Words from families</span>
+            07 <span>Words from families</span>
           </div>
           <div className="testimonial-layout">
             <div>
@@ -485,7 +521,7 @@ export default function Home() {
         <div className="container enquiry-grid">
           <div className="enquiry-copy">
             <div className="section-label">
-              07 <span>Start a conversation</span>
+              08 <span>Start a conversation</span>
             </div>
             <h2>
               Let’s find the
@@ -589,9 +625,6 @@ export default function Home() {
             <div>
               <small>Talk to us</small>
               <a href={`tel:${phone}`}>+91 88827 31685</a>
-              <a href="mailto:hello@preciselearning.in">
-                hello@preciselearning.in
-              </a>
             </div>
             <div>
               <small>Explore</small>
@@ -601,9 +634,34 @@ export default function Home() {
             </div>
             <div>
               <small>Follow along</small>
-              <a href="#contact">Instagram</a>
-              <a href="#contact">YouTube</a>
+              <a
+                href="https://www.instagram.com/preciselearning2014?stkn=eTc1aTczMjE1NjFq"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://m.youtube.com/%40preciselearning-2014?fbclid=PAb21jcAUeitxwZG9mAmV4dG4DYWVtAjExAHNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp1ioI1kykeh1Y21juPdVOeg8-_ksSqdRvEw259ELHd7PVQLJDd8fC36G-kaY_aem_yQPFbXt8vJ-rplCaiv03Xg"
+                target="_blank"
+                rel="noreferrer"
+              >
+                YouTube
+              </a>
             </div>
+          </div>
+          <div className="contact-map-wrap">
+            <div className="contact-map-heading">
+              <small>Visit us</small>
+              <MapPin size={16} />
+            </div>
+            <iframe
+              className="contact-map"
+              title="Precise Learning Burari location map"
+              src="https://www.google.com/maps?q=Burari%2C%20Delhi&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
         <footer className="container footer">
