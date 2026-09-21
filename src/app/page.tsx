@@ -30,33 +30,41 @@ import { AnimatePresence, motion } from "framer-motion";
 const phone = "+918882731685";
 const locationUrl = "https://share.google/ERIoC0liW7uHWkZ3r";
 const gallery = [
-  [
-    "A focused classroom session",
-    "/gallery-classroom.jpg",
-  ],
-  [
-    "Learning together",
-    "/gallery-learning.jpg",
-  ],
-  [
-    "A space to do your best",
-    "/about-teacher.jpg",
-  ],
-  [
-    "Curious minds at work",
-    "/gallery-curious.jpg",
-  ],
+  ["A focused classroom session", "/gallery-classroom.jpg"],
+  ["Learning together", "/gallery-learning.jpg"],
+  ["A space to do your best", "/about-teacher.jpg"],
+  ["Curious minds at work", "/gallery-curious.jpg"],
 ];
 const subjects = [
-  ["Mathematics", "Build problem-solving instincts.", <Atom size={22} />],
-  ["Science", "Make the world make sense.", <FlaskConical size={22} />],
-  ["Physics", "Think in principles, not formulas.", <Lightbulb size={22} />],
-  ["Chemistry", "Connect reactions to reality.", <Microscope size={22} />],
-  ["English", "Write with clarity and confidence.", <BookOpen size={22} />],
+  [
+    "Mathematics",
+    "Build problem-solving instincts.",
+    <Atom key="mathematics" size={22} />,
+  ],
+  [
+    "Science",
+    "Make the world make sense.",
+    <FlaskConical key="science" size={22} />,
+  ],
+  [
+    "Physics",
+    "Think in principles, not formulas.",
+    <Lightbulb key="physics" size={22} />,
+  ],
+  [
+    "Chemistry",
+    "Connect reactions to reality.",
+    <Microscope key="chemistry" size={22} />,
+  ],
+  [
+    "English",
+    "Write with clarity and confidence.",
+    <BookOpen key="english" size={22} />,
+  ],
   [
     "Social Science",
     "Learn the stories behind facts.",
-    <GraduationCap size={22} />,
+    <GraduationCap key="social-science" size={22} />,
   ],
 ];
 
@@ -593,12 +601,8 @@ export default function Home() {
             </div>
             <div>
               <small>Follow along</small>
-              <a href="#contact">
-                Instagram
-              </a>
-              <a href="#contact">
-                YouTube
-              </a>
+              <a href="#contact">Instagram</a>
+              <a href="#contact">YouTube</a>
             </div>
           </div>
         </div>

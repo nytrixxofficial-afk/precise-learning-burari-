@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import {
   ArrowLeft,
   FileText,
@@ -48,7 +49,11 @@ export default function AdminPage() {
   }, [authenticated]);
   async function login(event: FormEvent) {
     event.preventDefault();
-    const response = await fetch("/api/admin/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(credentials) });
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
     if (response.ok) {
       setAuthenticated(true);
       setLoginError("");
@@ -67,7 +72,11 @@ export default function AdminPage() {
     });
     if (response.ok) {
       const note = await response.json();
-      setNotes((items) => editingId ? items.map((item) => item.id === note.id ? note : item) : [note, ...items]);
+      setNotes((items) =>
+        editingId
+          ? items.map((item) => (item.id === note.id ? note : item))
+          : [note, ...items],
+      );
       setForm(emptyForm);
       setEditingId(null);
       setMessage("Note published to the student library.");
@@ -75,21 +84,28 @@ export default function AdminPage() {
   }
   async function removeNote(id: string) {
     const response = await fetch(`/api/notes?id=${id}`, { method: "DELETE" });
-    if (!response.ok) return setMessage("Your session has expired. Please sign in again.");
+    if (!response.ok)
+      return setMessage("Your session has expired. Please sign in again.");
     setNotes((items) => items.filter((note) => note.id !== id));
   }
   function editNote(note: Note) {
     setEditingId(note.id);
-    setForm({ title: note.title, description: note.description, classGroup: note.classGroup, subject: note.subject, fileName: note.fileName });
+    setForm({
+      title: note.title,
+      description: note.description,
+      classGroup: note.classGroup,
+      subject: note.subject,
+      fileName: note.fileName,
+    });
     setMessage("");
   }
 
   if (!authenticated)
     return (
       <main className="admin-shell">
-        <a className="admin-back" href="/">
+        <Link className="admin-back" href="/">
           <ArrowLeft size={16} /> Back to website
-        </a>
+        </Link>
         <div className="login-card">
           <div className="admin-lock">
             <LockKeyhole />
@@ -137,16 +153,19 @@ export default function AdminPage() {
   return (
     <main className="admin-shell">
       <header className="admin-header">
-        <a className="admin-back" href="/">
+        <Link className="admin-back" href="/">
           <ArrowLeft size={16} /> View website
-        </a>
+        </Link>
         <div>
           <span className="admin-kicker">Precise Learning Burari</span>
           <h1>Notes dashboard</h1>
         </div>
         <button
           className="admin-logout"
-          onClick={async () => { await fetch("/api/admin/login", { method: "DELETE" }); setAuthenticated(false); }}
+          onClick={async () => {
+            await fetch("/api/admin/login", { method: "DELETE" });
+            setAuthenticated(false);
+          }}
         >
           <LogOut size={15} /> Sign out
         </button>
