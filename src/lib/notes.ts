@@ -26,11 +26,7 @@ type NoteRow = {
   created_at: string;
 };
 
-const seedNotes = [
-  ["algebra", "Algebra: Identities & Equations", "Worked examples and practice prompts.", "9-10", "Maths", "algebra-identities.pdf"],
-  ["motion", "Motion & The Laws of Motion", "Formula map and concept checks.", "9-10", "Physics", "motion-laws.pdf"],
-  ["bonding", "Chemical Bonding Essentials", "Valency, bonds and structures.", "11-12", "Chemistry", "chemical-bonding.docx"],
-] as const;
+const legacySeedNoteIds = ["algebra", "motion", "bonding"] as const;
 
 function database() {
   if (!process.env.DATABASE_URL) {
@@ -55,12 +51,8 @@ export async function ensureNotesTable() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
-  for (const seed of seedNotes) {
-    await sql`
-      INSERT INTO notes (id, title, description, class_group, subject, file_name)
-      VALUES (${seed[0]}, ${seed[1]}, ${seed[2]}, ${seed[3]}, ${seed[4]}, ${seed[5]})
-      ON CONFLICT (id) DO NOTHING
-    `;
+  for (const id of legacySeedNoteIds) {
+    await sql`DELETE FROM notes WHERE id = ${id}`;
   }
   return sql;
 }
@@ -82,18 +74,7 @@ function mapNote(row: NoteRow): Note {
 
 export async function getNotes() {
   if (!process.env.DATABASE_URL) {
-    return seedNotes.map(([id, title, description, classGroup, subject, fileName]) => ({
-      id,
-      title,
-      description,
-      classGroup,
-      subject,
-      fileName,
-      imageUrl: null,
-      mimeType: null,
-      fileSize: null,
-      createdAt: "2026-06-12T00:00:00.000Z",
-    }));
+    return [];
   }
   const sql = await ensureNotesTable();
   const rows = await sql`SELECT * FROM notes ORDER BY created_at DESC`;

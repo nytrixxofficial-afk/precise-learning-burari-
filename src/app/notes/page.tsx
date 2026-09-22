@@ -11,74 +11,22 @@ import {
   Search,
 } from "lucide-react";
 
-const seedNotes = [
-  {
-    title: "Algebra: Identities & Equations",
-    description:
-      "A compact revision sheet with worked examples and practice prompts.",
-    classGroup: "9-10",
-    subject: "Maths",
-    type: "PDF",
-    accent: "mint",
-    imageUrl: null,
-  },
-  {
-    title: "Motion & The Laws of Motion",
-    description: "Formula map and concept checks for your next Physics test.",
-    classGroup: "9-10",
-    subject: "Physics",
-    type: "PDF",
-    accent: "yellow",
-    imageUrl: null,
-  },
-  {
-    title: "Chemical Bonding Essentials",
-    description: "Understand valency, bonds and structures in one clear guide.",
-    classGroup: "11-12",
-    subject: "Chemistry",
-    type: "DOC",
-    accent: "coral",
-    imageUrl: null,
-  },
-  {
-    title: "Cell: The Unit of Life",
-    description:
-      "Diagrams, definitions and a self-check quiz for quick revision.",
-    classGroup: "6-8",
-    subject: "Science",
-    type: "PDF",
-    accent: "blue",
-    imageUrl: null,
-  },
-  {
-    title: "Trigonometric Functions",
-    description:
-      "Build your confidence with identities, graphs and solved questions.",
-    classGroup: "11-12",
-    subject: "Maths",
-    type: "PDF",
-    accent: "mint",
-    imageUrl: null,
-  },
-  {
-    title: "Writing Better Answers",
-    description:
-      "A practical language toolkit for clearer, higher-scoring responses.",
-    classGroup: "6-8",
-    subject: "English",
-    type: "DOC",
-    accent: "yellow",
-    imageUrl: null,
-  },
-];
-type PortalNote = (typeof seedNotes)[number] & {
+const accents = ["mint", "yellow", "coral", "blue"] as const;
+type PortalNote = {
+  title: string;
+  description: string;
+  classGroup: string;
+  subject: string;
+  type: string;
+  accent: (typeof accents)[number];
   id?: string;
   fileName?: string;
   mimeType?: string | null;
+  imageUrl?: string | null;
 };
 
 export default function NotesPortal() {
-  const [notes, setNotes] = useState<PortalNote[]>(seedNotes);
+  const [notes, setNotes] = useState<PortalNote[]>([]);
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("All classes");
   const [subjectFilter, setSubjectFilter] = useState("All subjects");
@@ -93,7 +41,7 @@ export default function NotesPortal() {
                 type: note.mimeType
                   ? note.mimeType.split("/")[1].toUpperCase()
                   : (note.fileName?.split(".").pop() || "NOTE").toUpperCase(),
-                accent: seedNotes[index % seedNotes.length].accent,
+                accent: accents[index % accents.length],
               })),
             )
           : undefined,
