@@ -1,90 +1,146 @@
-import { NextResponse } from "next/server";
+import { del, put } from "@vercel/blob";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { ADMIN_COOKIE, verifyAdminToken } from "@/lib/admin-auth";
+import {
+  deleteNote,
+  getNote,
+  getNotes,
+  insertNote,
+  updateNote,
+} from "@/lib/notes";
 
-type Note = {
-  id: string;
-  title: string;
-  description: string;
-  classGroup: string;
-  subject: string;
-  fileName: string;
-  createdAt: string;
-};
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
-let notes: Note[] = [
-  {
-    id: "algebra",
-    title: "Algebra: Identities & Equations",
-    description: "Worked examples and practice prompts.",
-    classGroup: "9-10",
-    subject: "Maths",
-    fileName: "algebra-identities.pdf",
-    createdAt: "2026-06-12",
-  },
-  {
-    id: "motion",
-    title: "Motion & The Laws of Motion",
-    description: "Formula map and concept checks.",
-    classGroup: "9-10",
-    subject: "Physics",
-    fileName: "motion-laws.pdf",
-    createdAt: "2026-06-10",
-  },
-  {
-    id: "bonding",
-    title: "Chemical Bonding Essentials",
-    description: "Valency, bonds and structures.",
-    classGroup: "11-12",
-    subject: "Chemistry",
-    fileName: "chemical-bonding.docx",
-    createdAt: "2026-06-08",
-  },
-];
+class NotesValidationError extends Error {}
+
+function errorResponse(error: unknown) {
+  console.error("Notes API error", error);
+  return NextResponse.json(
+    { error: error instanceof Error ? error.message : "Unable to load notes." },
+    { status: error instanceof NotesValidationError ? 400 : 500 },
+  );
+}
+
+async function requireAdmin() {
+  const session = (await cookies()).get(ADMIN_COOKIE)?.value;
+  return verifyAdminToken(session);
+}
+
+function text(form: FormData, key: string) {
+  const value = form.get(key);
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function validateFields(form: FormData) {
+  const title = text(form, "title");
+  const description = text(form, "description");
+  const classGroup = text(form, "classGroup");
+  const subject = text(form, "subject");
+  if (!title || !description || !classGroup || !subject) {
+    throw new NotesValidationError("Title, description, class and subject are required.");
+  }
+  return { title, description, classGroup, subject };
+}
+
+async function uploadImage(file: File) {
+  if (!file.size) throw new NotesValidationError("Choose an image file to publish.");
+  if (!allowedImageTypes.has(file.type)) {
+    throw new NotesValidationError("Only JPEG, PNG, WebP and GIF images are supported.");
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    throw new NotesValidationError("Images must be 10 MB or smaller.");
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    throw new Error("BLOB_READ_WRITE_TOKEN is not configured.");
+  }
+  return put(`notes/${crypto.randomUUID()}-${file.name}`, file, {
+    access: "public",
+    addRandomSuffix: false,
+    contentType: file.type,
+  });
+}
 
 export async function GET() {
-  return NextResponse.json(notes);
+  try {
+    return NextResponse.json(await getNotes());
+  } catch (error) {
+    return errorResponse(error);
+  }
 }
 
 export async function POST(request: Request) {
-  const session = (await cookies()).get(ADMIN_COOKIE)?.value;
-  if (!(await verifyAdminToken(session))) return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
-  const body = await request.json();
-  if (
-    !body.title ||
-    !body.description ||
-    !body.classGroup ||
-    !body.subject ||
-    !body.fileName
-  )
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
+  }
+  try {
+    const form = await request.formData();
+    const fields = validateFields(form);
+    const file = form.get("image");
+    if (!(file instanceof File)) throw new NotesValidationError("Choose an image file to publish.");
+    const blob = await uploadImage(file);
     return NextResponse.json(
-      { error: "All note fields are required." },
-      { status: 400 },
+      await insertNote({
+        id: crypto.randomUUID(),
+        ...fields,
+        fileName: file.name,
+        imageUrl: blob.url,
+        mimeType: file.type,
+        fileSize: file.size,
+      }),
+      { status: 201 },
     );
-  const note: Note = {
-    ...body,
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString().slice(0, 10),
-  };
-  notes = [note, ...notes];
-  return NextResponse.json(note, { status: 201 });
+  } catch (error) {
+    return errorResponse(error);
+  }
 }
 
 export async function PUT(request: Request) {
-  const session = (await cookies()).get(ADMIN_COOKIE)?.value;
-  if (!(await verifyAdminToken(session))) return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
-  const body = await request.json();
-  if (!body.id || !body.title || !body.description || !body.classGroup || !body.subject || !body.fileName) return NextResponse.json({ error: "All note fields are required." }, { status: 400 });
-  const index = notes.findIndex((note) => note.id === body.id);
-  if (index === -1) return NextResponse.json({ error: "Note not found." }, { status: 404 });
-  notes[index] = { ...notes[index], ...body };
-  return NextResponse.json(notes[index]);
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
+  }
+  let uploadedUrl: string | null = null;
+  try {
+    const form = await request.formData();
+    const id = text(form, "id");
+    if (!id) throw new NotesValidationError("Note id is required.");
+    const existing = await getNote(id);
+    if (!existing) return NextResponse.json({ error: "Note not found." }, { status: 404 });
+    const fields = validateFields(form);
+    const file = form.get("image");
+    const uploadedFile = file instanceof File && file.size ? file : null;
+    const blob = uploadedFile ? await uploadImage(uploadedFile) : null;
+    uploadedUrl = blob?.url ?? null;
+    const note = await updateNote({
+      id,
+      ...fields,
+      fileName: uploadedFile ? uploadedFile.name : existing.fileName,
+      imageUrl: blob?.url ?? existing.imageUrl,
+      mimeType: blob ? uploadedFile?.type ?? existing.mimeType : existing.mimeType,
+      fileSize: blob ? uploadedFile?.size ?? existing.fileSize : existing.fileSize,
+    });
+    if (!note) return NextResponse.json({ error: "Note not found." }, { status: 404 });
+    if (blob && existing.imageUrl) await del(existing.imageUrl);
+    return NextResponse.json(note);
+  } catch (error) {
+    if (uploadedUrl) await del(uploadedUrl).catch((cleanupError) => console.error("Blob cleanup failed", cleanupError));
+    return errorResponse(error);
+  }
 }
 
 export async function DELETE(request: Request) {
-  const session = (await cookies()).get(ADMIN_COOKIE)?.value;
-  if (!(await verifyAdminToken(session))) return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
-  const id = new URL(request.url).searchParams.get("id");
-  notes = notes.filter((note) => note.id !== id);
-  return NextResponse.json({ ok: true });
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "Admin authentication required." }, { status: 401 });
+  }
+  try {
+    const id = new URL(request.url).searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "Note id is required." }, { status: 400 });
+    const note = await deleteNote(id);
+    if (!note) return NextResponse.json({ error: "Note not found." }, { status: 404 });
+    if (note.imageUrl) await del(note.imageUrl);
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    return errorResponse(error);
+  }
 }

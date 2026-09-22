@@ -20,6 +20,7 @@ const seedNotes = [
     subject: "Maths",
     type: "PDF",
     accent: "mint",
+    imageUrl: null,
   },
   {
     title: "Motion & The Laws of Motion",
@@ -28,6 +29,7 @@ const seedNotes = [
     subject: "Physics",
     type: "PDF",
     accent: "yellow",
+    imageUrl: null,
   },
   {
     title: "Chemical Bonding Essentials",
@@ -36,6 +38,7 @@ const seedNotes = [
     subject: "Chemistry",
     type: "DOC",
     accent: "coral",
+    imageUrl: null,
   },
   {
     title: "Cell: The Unit of Life",
@@ -45,6 +48,7 @@ const seedNotes = [
     subject: "Science",
     type: "PDF",
     accent: "blue",
+    imageUrl: null,
   },
   {
     title: "Trigonometric Functions",
@@ -54,6 +58,7 @@ const seedNotes = [
     subject: "Maths",
     type: "PDF",
     accent: "mint",
+    imageUrl: null,
   },
   {
     title: "Writing Better Answers",
@@ -63,18 +68,36 @@ const seedNotes = [
     subject: "English",
     type: "DOC",
     accent: "yellow",
+    imageUrl: null,
   },
 ];
+type PortalNote = (typeof seedNotes)[number] & {
+  id?: string;
+  fileName?: string;
+  mimeType?: string | null;
+};
 
 export default function NotesPortal() {
-  const [notes, setNotes] = useState(seedNotes);
+  const [notes, setNotes] = useState<PortalNote[]>(seedNotes);
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("All classes");
   const [subjectFilter, setSubjectFilter] = useState("All subjects");
   useEffect(() => {
     fetch("/api/notes")
       .then((response) => response.json())
-      .then(setNotes)
+      .then((data) =>
+        Array.isArray(data)
+          ? setNotes(
+              data.map((note, index) => ({
+                ...note,
+                type: note.mimeType
+                  ? note.mimeType.split("/")[1].toUpperCase()
+                  : (note.fileName?.split(".").pop() || "NOTE").toUpperCase(),
+                accent: seedNotes[index % seedNotes.length].accent,
+              })),
+            )
+          : undefined,
+      )
       .catch(() => undefined);
   }, []);
   const filteredNotes = useMemo(
@@ -174,8 +197,14 @@ export default function NotesPortal() {
           {filteredNotes.map((note) => (
             <article className="note-card" key={note.title}>
               <div className={`note-art ${note.accent}`}>
-                <span>{note.subject}</span>
-                <BookOpen size={36} strokeWidth={1.4} />
+                {note.imageUrl ? (
+                  <img src={note.imageUrl} alt="" />
+                ) : (
+                  <>
+                    <span>{note.subject}</span>
+                    <BookOpen size={36} strokeWidth={1.4} />
+                  </>
+                )}
               </div>
               <div className="note-info">
                 <div className="note-meta">
@@ -184,12 +213,15 @@ export default function NotesPortal() {
                 </div>
                 <h3>{note.title}</h3>
                 <p>{note.description}</p>
-                <button
-                  className="download-link"
-                  onClick={() => alert(`Opening ${note.title}`)}
-                >
-                  View note <ArrowRight size={15} />
-                </button>
+                {note.imageUrl ? (
+                  <a className="download-link" href={note.imageUrl} target="_blank" rel="noreferrer">
+                    View / open image <ArrowRight size={15} />
+                  </a>
+                ) : (
+                  <span className="download-link legacy-note">
+                    Text note <ArrowRight size={15} />
+                  </span>
+                )}
               </div>
             </article>
           ))}

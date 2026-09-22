@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  FileText,
+  Image as ImageIcon,
   LockKeyhole,
   LogOut,
   Plus,
@@ -19,6 +19,7 @@ type Note = {
   classGroup: string;
   subject: string;
   fileName: string;
+  imageUrl: string | null;
   createdAt: string;
 };
 const emptyForm = {
@@ -26,7 +27,6 @@ const emptyForm = {
   description: "",
   classGroup: "6-8",
   subject: "Maths",
-  fileName: "",
 };
 
 export default function AdminPage() {
@@ -45,7 +45,7 @@ export default function AdminPage() {
     if (authenticated)
       fetch("/api/notes")
         .then((response) => response.json())
-        .then(setNotes);
+        .then((data) => (Array.isArray(data) ? setNotes(data) : setMessage(data.error)));
   }, [authenticated]);
   async function login(event: FormEvent) {
     event.preventDefault();
@@ -61,17 +61,18 @@ export default function AdminPage() {
   }
   async function saveNote(event: FormEvent) {
     event.preventDefault();
-    if (!form.fileName) {
-      setMessage("Choose a PDF or DOC file name to publish the note.");
-      return;
-    }
+    const data = new FormData();
+    Object.entries(form).forEach(([key, value]) => data.append(key, value));
+    const fileInput = document.querySelector<HTMLInputElement>("#note-image");
+    if (fileInput?.files?.[0]) data.append("image", fileInput.files[0]);
+    if (editingId) data.append("id", editingId);
     const response = await fetch("/api/notes", {
       method: editingId ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editingId ? { ...form, id: editingId } : form),
+      body: data,
     });
+    const result = await response.json();
     if (response.ok) {
-      const note = await response.json();
+      const note = result as Note;
       setNotes((items) =>
         editingId
           ? items.map((item) => (item.id === note.id ? note : item))
@@ -80,7 +81,7 @@ export default function AdminPage() {
       setForm(emptyForm);
       setEditingId(null);
       setMessage("Note published to the student library.");
-    }
+    } else setMessage(result.error || "Unable to save this note.");
   }
   async function removeNote(id: string) {
     const response = await fetch(`/api/notes?id=${id}`, { method: "DELETE" });
@@ -95,7 +96,6 @@ export default function AdminPage() {
       description: note.description,
       classGroup: note.classGroup,
       subject: note.subject,
-      fileName: note.fileName,
     });
     setMessage("");
   }
@@ -185,7 +185,7 @@ export default function AdminPage() {
             {notes.map((note) => (
               <article className="admin-note" key={note.id}>
                 <div className="file-icon">
-                  <FileText size={20} />
+                  <ImageIcon size={20} />
                 </div>
                 <div>
                   <h3>{note.title}</h3>
@@ -273,15 +273,9 @@ export default function AdminPage() {
               </label>
             </div>
             <label>
-              File name
-              <input
-                value={form.fileName}
-                onChange={(event) =>
-                  setForm({ ...form, fileName: event.target.value })
-                }
-                placeholder="chapter-notes.pdf"
-                required
-              />
+              Image file
+              <input id="note-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required={!editingId} />
+              <small className="field-help">JPEG, PNG, WebP or GIF · 10 MB maximum{editingId ? " · leave empty to keep the current image" : ""}</small>
             </label>
             <button className="admin-primary">
               {editingId ? "Save changes" : "Publish note"} <Plus size={15} />
@@ -289,8 +283,7 @@ export default function AdminPage() {
             {message && <p className="admin-message">{message}</p>}
           </form>
           <small className="storage-note">
-            Files are currently represented by metadata. Connect this route to
-            cloud storage before production launch.
+            Images are stored in Vercel Blob and note details in Neon/Postgres.
           </small>
         </section>
       </div>
