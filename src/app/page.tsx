@@ -631,6 +631,7 @@ export default function Home() {
               <a href="#about">About us</a>
               <a href="#courses">Courses</a>
               <a href="/notes">Study notes</a>
+              <a href="/admin">Admin login</a>
             </div>
             <div>
               <small>Follow along</small>
