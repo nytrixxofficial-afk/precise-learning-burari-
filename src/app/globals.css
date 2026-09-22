@@ -1140,6 +1140,11 @@ h2 span {
   height: 190px;
   border: 0;
   filter: saturate(0.75);
+  pointer-events: none;
+}
+.contact-map-link {
+  display: block;
+  cursor: pointer;
 }
 .contact-intro {
   color: #9fb4b7;

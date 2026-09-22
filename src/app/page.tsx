@@ -28,7 +28,8 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 
 const phone = "+918882731685";
-const locationUrl = "https://share.google/ERIoC0liW7uHWkZ3r";
+const locationUrl =
+  "https://www.google.com/maps/dir//Precise+learning+Burari,+House+No+18+Street+Number+7,+Tomar+Colony,+Block+D,+D+84,+Burari,+Delhi,+110084/@28.6818304,77.2538368,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x390cff4acb488daf:0x217eb5f1165e19e0!2m2!1d77.1952503!2d28.7512427?entry=ttu&g_ep=EgoyMDI2MDkyMC4wIKXMDSoASAFQAw%3D%3D";
 const gallery = [
   ["A focused classroom session", "/gallery-classroom.jpg"],
   ["Learning together", "/gallery-learning.jpg"],
@@ -656,13 +657,23 @@ export default function Home() {
               <small>Visit us</small>
               <MapPin size={16} />
             </div>
-            <iframe
-              className="contact-map"
-              title="Precise Learning Burari location map"
-              src="https://www.google.com/maps?q=Burari%2C%20Delhi&output=embed"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+            <a
+              className="contact-map-link"
+              href={locationUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open Precise Learning Burari in Google Maps"
+            >
+              <iframe
+                className="contact-map"
+                title="Precise Learning Burari location map"
+                src="https://www.google.com/maps?q=Precise%20Learning%20Burari%2C%20Delhi&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                tabIndex={-1}
+                aria-hidden="true"
+              />
+            </a>
           </div>
         </div>
         <footer className="container footer">
