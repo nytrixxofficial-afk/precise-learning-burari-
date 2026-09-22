@@ -273,9 +273,9 @@ export default function AdminPage() {
               </label>
             </div>
             <label>
-              Image file
-              <input id="note-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required={!editingId} />
-              <small className="field-help">JPEG, PNG, WebP or GIF · 10 MB maximum{editingId ? " · leave empty to keep the current image" : ""}</small>
+              Note file
+              <input id="note-image" type="file" accept=".pdf,.doc,.docx,image/jpeg,image/png,image/webp,image/gif" required={!editingId} />
+              <small className="field-help">PDF, DOC, DOCX or image · 10 MB maximum{editingId ? " · leave empty to keep the current file" : ""}</small>
             </label>
             <button className="admin-primary">
               {editingId ? "Save changes" : "Publish note"} <Plus size={15} />

@@ -10,8 +10,16 @@ import {
   updateNote,
 } from "@/lib/notes";
 
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
-const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const allowedFileTypes = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
 
 class NotesValidationError extends Error {}
 
@@ -44,13 +52,13 @@ function validateFields(form: FormData) {
   return { title, description, classGroup, subject };
 }
 
-async function uploadImage(file: File) {
-  if (!file.size) throw new NotesValidationError("Choose an image file to publish.");
-  if (!allowedImageTypes.has(file.type)) {
-    throw new NotesValidationError("Only JPEG, PNG, WebP and GIF images are supported.");
+async function uploadFile(file: File) {
+  if (!file.size) throw new NotesValidationError("Choose a PDF, DOC, DOCX or image file to publish.");
+  if (!allowedFileTypes.has(file.type)) {
+    throw new NotesValidationError("Only PDF, DOC, DOCX, JPEG, PNG, WebP and GIF files are supported.");
   }
-  if (file.size > MAX_IMAGE_SIZE) {
-    throw new NotesValidationError("Images must be 10 MB or smaller.");
+  if (file.size > MAX_FILE_SIZE) {
+    throw new NotesValidationError("Files must be 10 MB or smaller.");
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error("BLOB_READ_WRITE_TOKEN is not configured.");
@@ -78,8 +86,8 @@ export async function POST(request: Request) {
     const form = await request.formData();
     const fields = validateFields(form);
     const file = form.get("image");
-    if (!(file instanceof File)) throw new NotesValidationError("Choose an image file to publish.");
-    const blob = await uploadImage(file);
+    if (!(file instanceof File)) throw new NotesValidationError("Choose a PDF, DOC, DOCX or image file to publish.");
+    const blob = await uploadFile(file);
     return NextResponse.json(
       await insertNote({
         id: crypto.randomUUID(),
@@ -110,7 +118,7 @@ export async function PUT(request: Request) {
     const fields = validateFields(form);
     const file = form.get("image");
     const uploadedFile = file instanceof File && file.size ? file : null;
-    const blob = uploadedFile ? await uploadImage(uploadedFile) : null;
+    const blob = uploadedFile ? await uploadFile(uploadedFile) : null;
     uploadedUrl = blob?.url ?? null;
     const note = await updateNote({
       id,

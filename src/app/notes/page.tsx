@@ -145,7 +145,7 @@ export default function NotesPortal() {
           {filteredNotes.map((note) => (
             <article className="note-card" key={note.title}>
               <div className={`note-art ${note.accent}`}>
-                {note.imageUrl ? (
+                {note.imageUrl && note.mimeType?.startsWith("image/") ? (
                   <img src={note.imageUrl} alt="" />
                 ) : (
                   <>
@@ -163,7 +163,7 @@ export default function NotesPortal() {
                 <p>{note.description}</p>
                 {note.imageUrl ? (
                   <a className="download-link" href={note.imageUrl} target="_blank" rel="noreferrer">
-                    View / open image <ArrowRight size={15} />
+                    View / open {note.mimeType?.startsWith("image/") ? "image" : "note file"} <ArrowRight size={15} />
                   </a>
                 ) : (
                   <span className="download-link legacy-note">
