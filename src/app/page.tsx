@@ -28,6 +28,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 
 const phone = "+918882731685";
+const email = "preciselearning0014@gmail.com";
 const locationUrl =
   "https://www.google.com/maps/dir//Precise+learning+Burari,+House+No+18+Street+Number+7,+Tomar+Colony,+Block+D,+D+84,+Burari,+Delhi,+110084/@28.6818304,77.2538368,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x390cff4acb488daf:0x217eb5f1165e19e0!2m2!1d77.1952503!2d28.7512427?entry=ttu&g_ep=EgoyMDI2MDkyMC4wIKXMDSoASAFQAw%3D%3D";
 const gallery = [
@@ -626,6 +627,7 @@ export default function Home() {
             <div>
               <small>Talk to us</small>
               <a href={`tel:${phone}`}>+91 88827 31685</a>
+              <a href={`mailto:${email}`}>{email}</a>
             </div>
             <div>
               <small>Explore</small>
