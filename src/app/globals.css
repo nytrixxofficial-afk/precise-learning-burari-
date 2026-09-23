@@ -422,19 +422,26 @@ h2 span {
 .hero-visual {
   position: relative;
   height: 475px;
+  transform-style: preserve-3d;
+  perspective: 1100px;
 }
 .hero-image {
   height: 100%;
   background: url("/student-group-landscape.jpg")
     center/cover;
   filter: saturate(0.78);
-  transform: perspective(900px) rotateY(-2deg) translateZ(0);
-  box-shadow: 18px 22px 0 rgba(16, 43, 63, 0.08);
+  transform: rotateY(-5deg) rotateX(2deg) translateZ(12px);
+  border-radius: 3px;
+  box-shadow:
+    18px 22px 0 rgba(16, 43, 63, 0.08),
+    26px 30px 34px rgba(16, 43, 63, 0.16);
   transition: transform 0.45s ease, box-shadow 0.45s ease;
 }
 .hero-image:hover {
-  transform: perspective(900px) rotateY(1deg) translateZ(10px);
-  box-shadow: 24px 28px 0 rgba(16, 43, 63, 0.1);
+  transform: rotateY(2deg) rotateX(-1deg) translateZ(28px);
+  box-shadow:
+    24px 28px 0 rgba(16, 43, 63, 0.1),
+    34px 38px 42px rgba(16, 43, 63, 0.2);
 }
 .hero-image:after {
   content: "";
@@ -455,7 +462,9 @@ h2 span {
   align-items: center;
   justify-content: center;
   color: var(--navy);
-  transform: rotate(-10deg);
+  transform: translateZ(54px) rotate(-10deg);
+  box-shadow: 12px 18px 24px rgba(16, 43, 63, 0.2);
+  animation: sticker-float 4s ease-in-out infinite;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -480,7 +489,16 @@ h2 span {
   gap: 10px;
   font-size: 10px;
   color: #718083;
-  box-shadow: 0 10px 28px #17374d14;
+  transform: translateZ(45px) rotateY(-4deg);
+  box-shadow: 0 16px 30px #17374d24;
+}
+@keyframes sticker-float {
+  0%, 100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -8px;
+  }
 }
 .hero-note-photo {
   width: 190px;
@@ -646,6 +664,7 @@ h2 span {
   position: relative;
   color: var(--navy);
   transform: translateZ(0);
+  transform-style: preserve-3d;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.09);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -726,6 +745,7 @@ h2 span {
   position: relative;
   min-height: 175px;
   transform: translateZ(0);
+  transform-style: preserve-3d;
   transition: background 0.2s, transform 0.3s ease, box-shadow 0.3s ease;
 }
 .subject-card:nth-child(3n + 1) {
@@ -872,6 +892,7 @@ h2 span {
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
+  transform-style: preserve-3d;
 }
 .note-card:hover {
   transform: translateY(-6px) rotateX(2deg) rotateY(-2deg) translateZ(8px);
@@ -962,6 +983,7 @@ h2 span {
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
+  transform-style: preserve-3d;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 .gallery-tile:hover,
@@ -1046,6 +1068,7 @@ h2 span {
   background-repeat: no-repeat;
   cursor: pointer;
   transform: translateZ(0);
+  transform-style: preserve-3d;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 .journey-tile:hover,

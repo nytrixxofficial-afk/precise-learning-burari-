@@ -239,7 +239,7 @@ export default function Home() {
             />
             <div className="hero-sticker">
               <span className="sticker-number">
-                9<span>+</span>
+                14<span>+</span>
               </span>
               <span>
                 years of
