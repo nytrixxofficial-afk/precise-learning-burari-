@@ -107,7 +107,22 @@ export default function Home() {
       setFormError("Please add your name and phone number.");
       return;
     }
+    const name = String(form.get("name"));
+    const phoneNumber = String(form.get("phone"));
+    const classLookingFor = String(form.get("class") || "Not specified");
+    const message = String(form.get("message") || "No additional message");
+    const whatsappMessage = [
+      "New enquiry from Precise Learning website",
+      `Name: ${name}`,
+      `Phone: ${phoneNumber}`,
+      `Class: ${classLookingFor}`,
+      `Message: ${message}`,
+    ].join("\n");
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+      whatsappMessage,
+    )}`;
     setFormError("");
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     setSubmitted(true);
     event.currentTarget.reset();
   }
@@ -559,7 +574,10 @@ export default function Home() {
                   <Check />
                 </div>
                 <h3>Thank you. We’ve got this.</h3>
-                <p>Our academic counsellor will call you shortly.</p>
+                <p>
+                  Your enquiry is ready in WhatsApp. Our academic counsellor
+                  will call you shortly.
+                </p>
                 <button
                   type="button"
                   className="text-link dark-link"
