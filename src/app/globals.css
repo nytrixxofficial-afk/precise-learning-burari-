@@ -228,6 +228,38 @@ h2 span {
   align-items: center;
   margin-top: 29px;
 }
+.hero-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border: 1px solid #e69470;
+  border-radius: 4px;
+  background: #fff8e7;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 5px 14px rgba(16, 43, 63, 0.08);
+}
+.hero-call svg {
+  color: #d07855;
+}
+.hero-call span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-call small {
+  color: #b66a4e;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-call:hover {
+  background: #f3d37c;
+  transform: translateY(-2px);
+}
 .text-link {
   display: inline-flex;
   align-items: center;

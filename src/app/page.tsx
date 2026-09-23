@@ -187,6 +187,13 @@ export default function Home() {
               <a className="button button-accent" href="#enquire">
                 Start your journey <ArrowRight size={17} />
               </a>
+              <a className="hero-call" href={`tel:${phone}`}>
+                <Phone size={17} />
+                <span>
+                  <small>Call us directly</small>
+                  +91 88827 31685
+                </span>
+              </a>
               <a className="button button-notes" href="/notes">
                 Get Notes <BookOpen size={16} />
               </a>
