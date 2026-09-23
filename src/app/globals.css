@@ -19,45 +19,22 @@
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: var(--navy);
-  animation: splash-disappear 0.55s ease 1.25s forwards;
+  background: #000;
+  animation:
+    splash-appear 0.45s ease-out both,
+    splash-disappear 0.65s ease-in 1.35s forwards;
 }
 .splash-image {
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  filter: saturate(0.8);
 }
-.splash-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(16, 43, 63, 0.84), rgba(16, 43, 63, 0.35));
-}
-.splash-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  letter-spacing: 0.16em;
-  text-align: center;
-}
-.splash-content img {
-  width: 72px;
-  height: 72px;
-  margin-bottom: 18px;
-  border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-}
-.splash-content span {
-  font-size: 18px;
-  font-weight: 700;
-}
-.splash-content small {
-  margin-top: 8px;
-  color: #e5d69f;
-  font-size: 9px;
+@keyframes splash-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes splash-disappear {
   to {

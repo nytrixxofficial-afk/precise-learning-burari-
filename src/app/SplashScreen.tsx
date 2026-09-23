@@ -7,7 +7,7 @@ export default function SplashScreen() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setVisible(false), 1800);
+    const timer = window.setTimeout(() => setVisible(false), 2000);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -19,24 +19,12 @@ export default function SplashScreen() {
     <div className="splash-screen" role="status" aria-label="Loading Precise Learning">
       <Image
         className="splash-image"
-        src="/student-group-landscape.jpg"
-        alt="Students learning together at Precise Learning"
+        src="/splash-sachin-gupta.png"
+        alt="Sachin Gupta from Precise Learning"
         fill
         priority
         sizes="100vw"
       />
-      <div className="splash-overlay" />
-      <div className="splash-content">
-        <Image
-          src="/precise-learning-logo.png"
-          alt=""
-          width={72}
-          height={72}
-          priority
-        />
-        <span>PRECISE LEARNING</span>
-        <small>BURARI · NEW DELHI</small>
-      </div>
     </div>
   );
 }
