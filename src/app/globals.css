@@ -19,14 +19,35 @@
   inset: 0;
   z-index: 100;
   overflow: hidden;
-  background: var(--navy);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(240, 171, 145, 0.22), transparent 28%),
+    radial-gradient(circle at 88% 82%, rgba(243, 211, 124, 0.24), transparent 30%),
+    var(--cream);
   animation:
     splash-appear 0.45s ease-out both,
     splash-disappear 0.65s ease-in 1.35s forwards;
 }
+.splash-screen::before,
+.splash-screen::after {
+  position: absolute;
+  content: "";
+  background: rgba(16, 43, 63, 0.09);
+}
+.splash-screen::before {
+  top: 0;
+  bottom: 0;
+  left: 13%;
+  width: 1px;
+}
+.splash-screen::after {
+  top: 18%;
+  right: 0;
+  left: 0;
+  height: 1px;
+}
 .splash-word {
   position: absolute;
-  color: rgba(239, 209, 127, 0.08);
+  color: rgba(16, 43, 63, 0.055);
   font-size: clamp(100px, 23vw, 300px);
   font-weight: 700;
   letter-spacing: -0.08em;
@@ -49,24 +70,35 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  color: #f7f8f4;
+  color: var(--navy);
   text-align: center;
   animation: splash-content-enter 0.8s ease-out 0.15s both;
 }
+.splash-content::before {
+  position: absolute;
+  width: min(78vw, 760px);
+  height: min(48vh, 360px);
+  border: 1px solid rgba(16, 43, 63, 0.18);
+  content: "";
+}
 .splash-content small {
-  color: #efd17f;
+  z-index: 1;
+  color: #c96f50;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.3em;
 }
 .splash-content h1 {
+  z-index: 1;
   margin: 22px 0 15px;
+  color: var(--navy);
   font-size: clamp(42px, 9vw, 108px);
   letter-spacing: 0.04em;
   line-height: 0.95;
 }
 .splash-content span {
-  color: #e69470;
+  z-index: 1;
+  color: #6f858b;
   font-size: 10px;
   letter-spacing: 0.28em;
 }
