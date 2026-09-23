@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import SplashScreen from "./SplashScreen";
 
 export const metadata: Metadata = {
   title: "Precise Learning Burari | Better thinking begins here",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en">
       <body>
+        <SplashScreen />
         {children}
         <Analytics />
       </body>
