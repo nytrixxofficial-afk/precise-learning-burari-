@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function SplashScreen() {
@@ -17,14 +16,17 @@ export default function SplashScreen() {
 
   return (
     <div className="splash-screen" role="status" aria-label="Loading Precise Learning">
-      <Image
-        className="splash-image"
-        src="/splash-sachin-gupta.png"
-        alt="Sachin Gupta from Precise Learning"
-        fill
-        priority
-        sizes="100vw"
-      />
+      <div className="splash-word splash-word-top" aria-hidden="true">
+        PRECISE
+      </div>
+      <div className="splash-word splash-word-bottom" aria-hidden="true">
+        LEARNING
+      </div>
+      <div className="splash-content">
+        <small>PRECISE LEARNING</small>
+        <h1>SACHIN GUPTA</h1>
+        <span>BURARI · NEW DELHI</span>
+      </div>
     </div>
   );
 }
