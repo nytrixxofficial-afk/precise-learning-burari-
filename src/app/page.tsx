@@ -2,10 +2,10 @@
 
 import { FormEvent, useState } from "react";
 import Image from "next/image";
+import SplashScreen from "./SplashScreen";
 import {
   ArrowRight,
   Atom,
-  Award,
   BookOpen,
   Check,
   ChevronDown,
@@ -18,26 +18,16 @@ import {
   Microscope,
   Phone,
   Play,
-  Quote,
-  ShieldCheck,
   Sparkles,
   Target,
-  Users,
   X,
 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 
 const phone = "+918882731685";
 const email = "preciselearning0014@gmail.com";
 const locationUrl =
   "https://www.google.com/maps/dir//Precise+learning+Burari,+House+No+18+Street+Number+7,+Tomar+Colony,+Block+D,+D+84,+Burari,+Delhi,+110084/@28.6818304,77.2538368,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x390cff4acb488daf:0x217eb5f1165e19e0!2m2!1d77.1952503!2d28.7512427?entry=ttu&g_ep=EgoyMDI2MDkyMC4wIKXMDSoASAFQAw%3D%3D";
 const gallery = [
-  ["A focused classroom session", "/gallery-classroom.jpg"],
-  ["Learning together", "/gallery-learning.jpg"],
-  ["A space to do your best", "/about-teacher.jpg"],
-  ["Curious minds at work", "/gallery-curious.jpg"],
-];
-const journeyGallery = [
   ["The classroom that started it all", "/journey-2014-1.jpg"],
   ["A teacher, always learning", "/journey-2014-2.jpg"],
   ["Growing together", "/journey-2014-3.jpg"],
@@ -46,32 +36,32 @@ const journeyGallery = [
 const subjects = [
   [
     "Mathematics",
-    "Build problem-solving instincts.",
+    "Learn and practise school-level mathematics.",
     <Atom key="mathematics" size={22} />,
   ],
   [
     "Science",
-    "Make the world make sense.",
+    "Study science topics from the school syllabus.",
     <FlaskConical key="science" size={22} />,
   ],
   [
     "Physics",
-    "Think in principles, not formulas.",
+    "Work through physics concepts and numerical problems.",
     <Lightbulb key="physics" size={22} />,
   ],
   [
     "Chemistry",
-    "Connect reactions to reality.",
+    "Study chemistry concepts, equations and exercises.",
     <Microscope key="chemistry" size={22} />,
   ],
   [
     "English",
-    "Write with clarity and confidence.",
+    "Practise reading, writing and grammar.",
     <BookOpen key="english" size={22} />,
   ],
   [
     "Social Science",
-    "Learn the stories behind facts.",
+    "Review school topics and practise key concepts.",
     <GraduationCap key="social-science" size={22} />,
   ],
 ];
@@ -128,11 +118,9 @@ export default function Home() {
   }
   return (
     <main id="top">
+      <SplashScreen />
       <div className="announcement">
-        <span>Admissions open for the 2026-27 academic year</span>
-        <a href="#enquire">
-          Book a free counselling call <ArrowRight size={14} />
-        </a>
+        <span>Tuition for Classes 6–12 in Burari, Delhi</span>
       </div>
       <nav className="navbar">
         <div className="container nav-inner">
@@ -177,30 +165,23 @@ export default function Home() {
       <section className="hero">
         <div className="hero-grid container">
           <div className="hero-copy">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="eyebrow"
-            >
-              <span className="eyebrow-dot" /> Intentional learning. Measurable
-              growth.
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              Where better
+            <div className="eyebrow">
+              <span className="eyebrow-dot" /> Tuition for Classes 6–12
+            </div>
+            <h1>
+              Tuition for
               <br />
-              <em>thinking</em> begins.
-            </motion.h1>
+              <em>Classes 6–12</em>
+              <br />
+              in Burari
+            </h1>
             <p className="hero-text">
-              A focused learning space in Burari where students build strong
-              fundamentals, genuine confidence and the habits to go further.
+              Maths, Science and subject tuition for Classes 6–12 in Burari.
+              Ask us about current batches, subjects and timings.
             </p>
             <div className="hero-ctas">
               <a className="button button-accent" href="#enquire">
-                Start your journey <ArrowRight size={17} />
+                Ask about classes <ArrowRight size={17} />
               </a>
               <a className="hero-call" href={`tel:${phone}`}>
                 <Phone size={17} />
@@ -219,17 +200,6 @@ export default function Home() {
                 See how we teach
               </a>
             </div>
-            <div className="trust-row">
-              <span>
-                <ShieldCheck size={16} /> Parent-trusted
-              </span>
-              <span>
-                <Award size={16} /> Result-focused
-              </span>
-              <span>
-                <Users size={16} /> Small batches
-              </span>
-            </div>
           </div>
           <div className="hero-visual">
             <div
@@ -239,18 +209,18 @@ export default function Home() {
             />
             <div className="hero-sticker">
               <span className="sticker-number">
-                14<span>+</span>
+                2014
               </span>
               <span>
-                years of
+                Since
                 <br />
-                shaping futures
+                Burari, Delhi
               </span>
             </div>
           </div>
         </div>
         <div className="hero-bottom container">
-          <span>Trusted by families across Burari</span>
+          <span>Precise Learning, Burari</span>
           <div className="line" />
           <span className="scroll-hint">
             Scroll to explore <ChevronDown size={15} />
@@ -264,15 +234,10 @@ export default function Home() {
           </div>
           <div className="about-content">
             <div className="about-heading">
-              <h2>
-                Clarity in teaching.
-                <br />
-                <span>Confidence in every student.</span>
-              </h2>
+              <h2>Tuition with clear explanations and guided practice.</h2>
               <p>
-                We are more than a tuition centre. We are a close-knit academic
-                community built around one belief: when a student understands
-                the why, the marks follow.
+                Precise Learning is a tuition centre in Burari for students in
+                Classes 6–12.
               </p>
             </div>
             <div className="about-body">
@@ -283,29 +248,25 @@ export default function Home() {
               />
               <div className="about-details">
                 <p>
-                  Precise Learning brings thoughtful teaching, consistent
-                  practice and personal attention to Classes 6–12. Our
-                  classrooms are designed for questions, not just answers.
+                  Lessons cover school subjects through explanations, worked
+                  examples and practice. Contact us to confirm subject
+                  availability, batch timings and fees.
                 </p>
                 <a className="text-link dark-link" href="#approach">
                   Discover our approach <ArrowRight size={16} />
                 </a>
-                <div className="stat-row">
+                <div className="about-facts">
                   <div>
-                    <strong>
-                      500<span>+</span>
-                    </strong>
-                    <small>students guided</small>
+                    <b>Classes</b>
+                    <span>6–12</span>
                   </div>
                   <div>
-                    <strong>
-                      94<span>%</span>
-                    </strong>
-                    <small>parent referrals</small>
+                    <b>Subjects</b>
+                    <span>Maths, Science, English and more</span>
                   </div>
                   <div>
-                    <strong>9</strong>
-                    <small>years of care</small>
+                    <b>Location</b>
+                    <span>Burari, Delhi</span>
                   </div>
                 </div>
               </div>
@@ -321,14 +282,14 @@ export default function Home() {
             </div>
             <div>
               <h2>
-                The right rhythm
+                Tuition by class group
                 <br />
-                <span>for every stage.</span>
+                <span>Classes 6–12</span>
               </h2>
             </div>
             <p>
-              Focused programmes that meet students where they are and move them
-              forward with purpose.
+              Tuition groups are organised for Classes 6–8, 9–10 and 11–12.
+              Contact us to check current availability and timings.
             </p>
           </div>
           <div className="course-grid">
@@ -336,21 +297,21 @@ export default function Home() {
               number="01"
               title="Foundation"
               classes="Classes 6–8"
-              text="Build the curiosity, core concepts and study habits that make future learning easier."
+              text="Ask about subject availability and current batch timings for Classes 6–8."
               tone="mint"
             />
             <CourseCard
               number="02"
-              title="Momentum"
+              title="Board support"
               classes="Classes 9–10"
-              text="Turn fundamentals into exam confidence with structured practice and feedback."
+              text="Tuition and practice for school topics in Classes 9 and 10."
               tone="yellow"
             />
             <CourseCard
               number="03"
-              title="Direction"
+              title="Senior tuition"
               classes="Classes 11–12"
-              text="Go deeper, think sharper and prepare for board exams with a clear plan."
+              text="Contact us to confirm available subjects and support for Classes 11 and 12."
               tone="coral"
             />
           </div>
@@ -369,10 +330,7 @@ export default function Home() {
                 <span>Stronger foundations.</span>
               </h2>
             </div>
-            <p>
-              Our teachers make each subject feel less like a hurdle and more
-              like a skill worth owning.
-            </p>
+            <p>Ask us about tuition availability for these school subjects.</p>
           </div>
           <div className="subject-grid">
             {subjects.map(([title, text, icon]) => (
@@ -395,12 +353,9 @@ export default function Home() {
             <h2>
               Progress is a process.
               <br />
-              <em>We make it visible.</em>
+              <em>Our class routine.</em>
             </h2>
-            <p>
-              Good learning is not a single breakthrough. It is a sequence of
-              small, supported wins.
-            </p>
+            <p>Lessons use explanation, guided examples, practice and review.</p>
           </div>
           <div className="timeline">
             <Step
@@ -434,18 +389,15 @@ export default function Home() {
         <div className="container">
           <div className="section-heading-row">
             <div>
-              <div className="section-label">
-                05 <span>Inside Precise</span>
-              </div>
+              <div className="section-label">05 <span>Our classroom</span></div>
               <h2>
-                A place where
+                Precise Learning
                 <br />
-                <span>focus feels natural.</span>
+                <span>in Burari.</span>
               </h2>
             </div>
             <p>
-              Take a peek at the warm, focused spaces where our students learn
-              every day.
+              Photos from the classroom and the people who learn here.
             </p>
           </div>
           <div className="gallery-grid">
@@ -463,98 +415,20 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="section journey-section">
-        <div className="container">
-          <div className="journey-heading">
-            <div>
-              <div className="section-label">
-                06 <span>Since 2014</span>
-              </div>
-              <h2>
-                Our journey,
-                <br />
-                <em>through the years.</em>
-              </h2>
-            </div>
-            <p>Where every photograph tells a story of our journey.</p>
-          </div>
-          <div className="journey-grid">
-            {journeyGallery.map(([caption, image]) => (
-              <button
-                className="journey-tile"
-                key={image}
-                onClick={() => setSelectedImage(image)}
-                aria-label={`Open image: ${caption}`}
-                style={{ backgroundImage: `url(${image})` }}
-              >
-                <span>{caption}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="section testimonials-section">
-        <div className="container">
-          <div className="section-label">
-            07 <span>Words from families</span>
-          </div>
-          <div className="testimonial-layout">
-            <div>
-              <h2>
-                Progress worth
-                <br />
-                <em>talking about.</em>
-              </h2>
-              <div className="rating">
-                <span>★★★★★</span> <b>4.9 / 5</b>
-                <small>from our parent community</small>
-              </div>
-            </div>
-            <div className="quote-card">
-              <Quote size={38} />
-              <p>
-                “The biggest change was not just in my daughter’s marks. She
-                started raising her hand, asking questions and believing she
-                could solve difficult problems.”
-              </p>
-              <div className="quote-person">
-                <div className="avatar">A</div>
-                <span>
-                  <b>Mrs. Ananya Sharma</b>
-                  <small>Parent of a Class 10 student</small>
-                </span>
-              </div>
-              <div className="quote-dots">
-                <span className="active" />
-                <span />
-                <span />
-              </div>
-              <a
-                className="google-reviews-link"
-                href="https://share.google/6PNtQzLEaapsoxnjp"
-                target="_blank"
-                rel="noreferrer"
-              >
-                More reviews on Google <ArrowRight size={15} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
       <section id="enquire" className="enquiry-section">
         <div className="container enquiry-grid">
           <div className="enquiry-copy">
             <div className="section-label">
-              08 <span>Start a conversation</span>
+              06 <span>Enquiries</span>
             </div>
             <h2>
-              Let’s find the
+              Ask about
               <br />
-              <em>right next step.</em>
+              <em>classes and timings.</em>
             </h2>
             <p>
-              Tell us a little about your child and we’ll get back to you with a
-              clear, no-pressure recommendation.
+              Share your contact details and class. WhatsApp will open with a
+              pre-filled message for you to review and send.
             </p>
             <div className="enquiry-contact">
               <a href={`tel:${phone}`}>
@@ -573,10 +447,10 @@ export default function Home() {
                 <div className="success-icon">
                   <Check />
                 </div>
-                <h3>Thank you. We’ve got this.</h3>
+                <h3>WhatsApp message ready</h3>
                 <p>
-                  Your enquiry is ready in WhatsApp. Our academic counsellor
-                  will call you shortly.
+                  Review and send the message so our team receives your
+                  enquiry.
                 </p>
                 <button
                   type="button"
@@ -705,7 +579,10 @@ export default function Home() {
         </div>
         <footer className="container footer">
           <span>© 2026 Precise Learning Burari. All rights reserved.</span>
-          <span>Made with care for better learning.</span>
+          <nav className="footer-legal" aria-label="Legal">
+            <a href="/privacy-policy">Privacy policy</a>
+            <a href="/terms-and-conditions">Terms and conditions</a>
+          </nav>
         </footer>
       </section>
       <a
@@ -717,13 +594,12 @@ export default function Home() {
       >
         <MessageCircle size={23} />
       </a>
-      <AnimatePresence>
         {selectedImage && (
-          <motion.div
+          <div
             className="lightbox"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Gallery image preview"
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -737,9 +613,8 @@ export default function Home() {
               style={{ backgroundImage: `url(${selectedImage})` }}
               onClick={(event) => event.stopPropagation()}
             />
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </main>
   );
 }
