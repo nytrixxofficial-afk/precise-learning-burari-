@@ -393,12 +393,11 @@ h2 span {
 }
 .hero-visual {
   position: relative;
-  height: 475px;
+  aspect-ratio: 4 / 3;
 }
 .hero-image {
   height: 100%;
-  background: url("/journey-2014-1.jpg")
-    center/cover;
+  background: url("/classroom-group.jpg") center/cover;
   filter: saturate(0.78);
   border-radius: 3px;
   box-shadow: 0 12px 28px rgba(16, 43, 63, 0.12);
@@ -1413,9 +1412,6 @@ h2 span {
     grid-template-columns: 1fr;
     gap: 44px;
   }
-  .hero-visual {
-    height: 390px;
-  }
   .hero-sticker {
     left: 10px;
   }
@@ -1567,9 +1563,6 @@ h2 span {
     flex-direction: column;
     gap: 17px;
   }
-  .hero-visual {
-    height: 300px;
-  }
   .hero-image,
   .about-image {
     transform: none;
@@ -1583,12 +1576,13 @@ h2 span {
     box-shadow: 0 5px 16px rgba(16, 43, 63, 0.08);
   }
   .hero-sticker {
-    width: 116px;
-    height: 116px;
-    bottom: 20px;
+    width: 92px;
+    height: 92px;
+    bottom: 12px;
+    left: 8px;
   }
   .sticker-number {
-    font-size: 35px;
+    font-size: 28px;
   }
   .hero-note {
     top: 15px;
