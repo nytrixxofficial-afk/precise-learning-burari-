@@ -400,18 +400,20 @@ export default function Home() {
               Photos from the classroom and the people who learn here.
             </p>
           </div>
-          <div className="gallery-grid">
-            {gallery.map(([caption, image], index) => (
-              <button
-                className={`gallery-tile gallery-${index + 1}`}
-                key={image}
-                onClick={() => setSelectedImage(image)}
-                aria-label={`Open image: ${caption}`}
-                style={{ backgroundImage: `url(${image})` }}
-              >
-                <span>{caption}</span>
-              </button>
-            ))}
+          <div className="gallery-frame">
+            <div className="gallery-grid">
+              {gallery.map(([caption, image], index) => (
+                <button
+                  className={`gallery-tile gallery-${index + 1}`}
+                  key={image}
+                  onClick={() => setSelectedImage(image)}
+                  aria-label={`Open image: ${caption}`}
+                  style={{ backgroundImage: `url(${image})` }}
+                >
+                  <span>{caption}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
