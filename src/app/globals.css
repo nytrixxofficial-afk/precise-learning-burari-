@@ -1561,6 +1561,9 @@ h2 span {
     flex-direction: column;
     gap: 17px;
   }
+  .gallery-4 {
+    grid-column: span 2;
+  }
   .hero-image,
   .about-image {
     transform: none;
@@ -1613,22 +1616,21 @@ h2 span {
   }
   .gallery-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 150px 150px 150px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
-  .gallery-1 {
-    grid-column: span 2;
-    grid-row: auto;
+  .gallery-tile {
+    aspect-ratio: 3 / 4;
   }
-  .gallery-2 {
-    grid-column: auto;
-  }
+  .gallery-1,
+  .gallery-2,
   .gallery-3 {
     grid-column: auto;
-    grid-row: span 2;
+    grid-row: auto;
   }
   .gallery-4 {
-    grid-column: auto;
+    grid-column: span 2;
+    aspect-ratio: 16 / 9;
   }
   .form-row {
     grid-template-columns: 1fr;
