@@ -10,10 +10,12 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
+import type { StudyCategory } from "@/lib/notes";
 import "./admin.css";
 
 type Note = {
   id: string;
+  category: StudyCategory;
   title: string;
   description: string;
   classGroup: string;
@@ -23,6 +25,7 @@ type Note = {
   createdAt: string;
 };
 const emptyForm = {
+  category: "notes" as StudyCategory,
   title: "",
   description: "",
   classGroup: "6-8",
@@ -43,7 +46,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (authenticated)
-      fetch("/api/notes")
+      fetch("/api/notes?category=all")
         .then((response) => response.json())
         .then((data) => (Array.isArray(data) ? setNotes(data) : setMessage(data.error)));
   }, [authenticated]);
@@ -80,7 +83,11 @@ export default function AdminPage() {
       );
       setForm(emptyForm);
       setEditingId(null);
-      setMessage("Note published to the student library.");
+      setMessage(
+        note.category === "important-questions"
+          ? "Important questions published to the student library."
+          : "Note published to the student library.",
+      );
     } else setMessage(result.error || "Unable to save this note.");
   }
   async function removeNote(id: string) {
@@ -92,6 +99,7 @@ export default function AdminPage() {
   function editNote(note: Note) {
     setEditingId(note.id);
     setForm({
+      category: note.category,
       title: note.title,
       description: note.description,
       classGroup: note.classGroup,
@@ -111,8 +119,8 @@ export default function AdminPage() {
             <LockKeyhole />
           </div>
           <span className="admin-kicker">Precise Learning Burari</span>
-          <h1>Notes dashboard</h1>
-          <p>Private workspace for managing the student study library.</p>
+          <h1>Study library dashboard</h1>
+          <p>Private workspace for managing notes and important questions.</p>
           <form onSubmit={login}>
             <label>
               Username
@@ -158,7 +166,7 @@ export default function AdminPage() {
         </Link>
         <div>
           <span className="admin-kicker">Precise Learning Burari</span>
-          <h1>Notes dashboard</h1>
+          <h1>Study library dashboard</h1>
         </div>
         <button
           className="admin-logout"
@@ -176,7 +184,7 @@ export default function AdminPage() {
             <div>
               <span className="admin-kicker">Study library</span>
               <h2>
-                Published notes <small>{notes.length}</small>
+                Published materials <small>{notes.length}</small>
               </h2>
             </div>
             <span className="live-pill">● Live</span>
@@ -190,6 +198,11 @@ export default function AdminPage() {
                 <div>
                   <h3>{note.title}</h3>
                   <p>
+                    <span className="admin-category-tag">
+                      {note.category === "important-questions"
+                        ? "Important Questions"
+                        : "Notes"}
+                    </span>{" "}
                     {note.subject} · Classes {note.classGroup} · {note.fileName}
                   </p>
                 </div>
@@ -214,11 +227,29 @@ export default function AdminPage() {
           <div className="panel-title">
             <div>
               <span className="admin-kicker">Content</span>
-              <h2>{editingId ? "Edit note" : "Add a new note"}</h2>
+              <h2>{editingId ? "Edit material" : "Add study material"}</h2>
             </div>
             <Plus size={21} />
           </div>
           <form onSubmit={saveNote}>
+            <label>
+              Library
+              <select
+                value={form.category}
+                onChange={(event) =>
+                  setForm({
+                    ...form,
+                    category:
+                      event.target.value === "important-questions"
+                        ? "important-questions"
+                        : "notes",
+                  })
+                }
+              >
+                <option value="notes">Notes</option>
+                <option value="important-questions">Important Questions</option>
+              </select>
+            </label>
             <label>
               Title
               <input
@@ -269,21 +300,27 @@ export default function AdminPage() {
                   <option>Physics</option>
                   <option>Chemistry</option>
                   <option>English</option>
+                  <option>Social Science</option>
                 </select>
               </label>
             </div>
             <label>
-              Note file
+              Study file
               <input id="note-image" type="file" accept=".pdf,.doc,.docx,image/jpeg,image/png,image/webp,image/gif" required={!editingId} />
               <small className="field-help">PDF, DOC, DOCX or image · 10 MB maximum{editingId ? " · leave empty to keep the current file" : ""}</small>
             </label>
             <button className="admin-primary">
-              {editingId ? "Save changes" : "Publish note"} <Plus size={15} />
+              {editingId
+                ? "Save changes"
+                : form.category === "important-questions"
+                  ? "Publish questions"
+                  : "Publish note"}{" "}
+              <Plus size={15} />
             </button>
             {message && <p className="admin-message">{message}</p>}
           </form>
           <small className="storage-note">
-            Images are stored in Vercel Blob and note details in Neon/Postgres.
+            Files are stored in Vercel Blob and library details in Neon/Postgres.
           </small>
         </section>
       </div>

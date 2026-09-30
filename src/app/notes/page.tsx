@@ -87,9 +87,14 @@ export default function NotesPortal() {
             </span>
           </div>
         </div>
-        <Link className="portal-admin" href="/admin">
-          <LockKeyhole size={14} /> Admin
-        </Link>
+        <div className="portal-tools">
+          <Link className="portal-question-button" href="/important-questions">
+            Get Important Questions <ArrowRight size={14} />
+          </Link>
+          <Link className="portal-admin" href="/admin">
+            <LockKeyhole size={14} /> Admin
+          </Link>
+        </div>
       </header>
       <section className="notes-portal-hero">
         <span className="portal-eyebrow">Student study portal</span>

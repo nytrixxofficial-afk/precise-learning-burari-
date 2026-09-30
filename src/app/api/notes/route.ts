@@ -9,6 +9,7 @@ import {
   insertNote,
   updateNote,
 } from "@/lib/notes";
+import type { StudyCategory } from "@/lib/notes";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const allowedFileTypes = new Set([
@@ -41,15 +42,24 @@ function text(form: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function validateFields(form: FormData) {
+function isStudyCategory(value: string): value is StudyCategory {
+  return value === "notes" || value === "important-questions";
+}
+
+function validateFields(form: FormData, defaultCategory: StudyCategory = "notes") {
   const title = text(form, "title");
   const description = text(form, "description");
   const classGroup = text(form, "classGroup");
   const subject = text(form, "subject");
+  const rawCategory = text(form, "category");
+  const category = rawCategory || defaultCategory;
   if (!title || !description || !classGroup || !subject) {
     throw new NotesValidationError("Title, description, class and subject are required.");
   }
-  return { title, description, classGroup, subject };
+  if (!isStudyCategory(category)) {
+    throw new NotesValidationError("Choose Notes or Important Questions.");
+  }
+  return { category, title, description, classGroup, subject };
 }
 
 async function uploadFile(file: File) {
@@ -70,9 +80,17 @@ async function uploadFile(file: File) {
   });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    return NextResponse.json(await getNotes());
+    const requestedCategory = new URL(request.url).searchParams.get("category") || "notes";
+    if (
+      requestedCategory !== "notes" &&
+      requestedCategory !== "important-questions" &&
+      requestedCategory !== "all"
+    ) {
+      throw new NotesValidationError("Choose a valid study library.");
+    }
+    return NextResponse.json(await getNotes(requestedCategory));
   } catch (error) {
     return errorResponse(error);
   }
@@ -115,7 +133,7 @@ export async function PUT(request: Request) {
     if (!id) throw new NotesValidationError("Note id is required.");
     const existing = await getNote(id);
     if (!existing) return NextResponse.json({ error: "Note not found." }, { status: 404 });
-    const fields = validateFields(form);
+    const fields = validateFields(form, existing.category);
     const file = form.get("image");
     const uploadedFile = file instanceof File && file.size ? file : null;
     const blob = uploadedFile ? await uploadFile(uploadedFile) : null;

@@ -1,7 +1,10 @@
 import { neon } from "@neondatabase/serverless";
 
+export type StudyCategory = "notes" | "important-questions";
+
 export type Note = {
   id: string;
+  category: StudyCategory;
   title: string;
   description: string;
   classGroup: string;
@@ -15,6 +18,7 @@ export type Note = {
 
 type NoteRow = {
   id: string;
+  category: StudyCategory;
   title: string;
   description: string;
   class_group: string;
@@ -48,9 +52,11 @@ export async function ensureNotesTable() {
       image_url TEXT,
       mime_type TEXT,
       file_size INTEGER,
+      category TEXT NOT NULL DEFAULT 'notes',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
+  await sql`ALTER TABLE notes ADD COLUMN IF NOT EXISTS category TEXT NOT NULL DEFAULT 'notes'`;
   for (const id of legacySeedNoteIds) {
     await sql`DELETE FROM notes WHERE id = ${id}`;
   }
@@ -60,6 +66,7 @@ export async function ensureNotesTable() {
 function mapNote(row: NoteRow): Note {
   return {
     id: row.id,
+    category: row.category ?? "notes",
     title: row.title,
     description: row.description,
     classGroup: row.class_group,
@@ -72,12 +79,15 @@ function mapNote(row: NoteRow): Note {
   };
 }
 
-export async function getNotes() {
+export async function getNotes(category: StudyCategory | "all" = "notes") {
   if (!process.env.DATABASE_URL) {
     return [];
   }
   const sql = await ensureNotesTable();
-  const rows = await sql`SELECT * FROM notes ORDER BY created_at DESC`;
+  const rows =
+    category === "all"
+      ? await sql`SELECT * FROM notes ORDER BY created_at DESC`
+      : await sql`SELECT * FROM notes WHERE category = ${category} ORDER BY created_at DESC`;
   return (rows as NoteRow[]).map(mapNote);
 }
 
@@ -90,8 +100,8 @@ export async function getNote(id: string) {
 export async function insertNote(note: Omit<Note, "createdAt">) {
   const sql = await ensureNotesTable();
   const rows = await sql`
-    INSERT INTO notes (id, title, description, class_group, subject, file_name, image_url, mime_type, file_size)
-    VALUES (${note.id}, ${note.title}, ${note.description}, ${note.classGroup}, ${note.subject}, ${note.fileName}, ${note.imageUrl}, ${note.mimeType}, ${note.fileSize})
+    INSERT INTO notes (id, category, title, description, class_group, subject, file_name, image_url, mime_type, file_size)
+    VALUES (${note.id}, ${note.category}, ${note.title}, ${note.description}, ${note.classGroup}, ${note.subject}, ${note.fileName}, ${note.imageUrl}, ${note.mimeType}, ${note.fileSize})
     RETURNING *
   `;
   return mapNote(rows[0] as NoteRow);
@@ -101,7 +111,7 @@ export async function updateNote(note: Omit<Note, "createdAt">) {
   const sql = await ensureNotesTable();
   const rows = await sql`
     UPDATE notes
-    SET title = ${note.title}, description = ${note.description}, class_group = ${note.classGroup},
+    SET category = ${note.category}, title = ${note.title}, description = ${note.description}, class_group = ${note.classGroup},
         subject = ${note.subject}, file_name = ${note.fileName}, image_url = ${note.imageUrl},
         mime_type = ${note.mimeType}, file_size = ${note.fileSize}
     WHERE id = ${note.id}

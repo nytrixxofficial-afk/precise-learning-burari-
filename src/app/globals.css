@@ -929,13 +929,22 @@ h2 span {
   gap: 12px;
 }
 .gallery-tile {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   background-size: cover;
   background-position: center;
   border: 0;
-  border-radius: 7px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
+}
+.gallery-1 {
+  background-position: center 38%;
+}
+.gallery-2 {
+  background-position: center 52%;
+}
+.gallery-3 {
+  background-position: center 72%;
 }
 .gallery-4 {
   background-color: #e5e9e3;
@@ -1351,6 +1360,62 @@ h2 span {
   background: #1d465e;
   transform: translateY(-1px);
 }
+.portal-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.portal-library-link {
+  color: #526b72;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.portal-library-link:hover {
+  color: #d47f62;
+}
+.portal-question-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 13px;
+  border: 1px solid #d47f62;
+  background: #d47f62;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.portal-question-button:hover {
+  background: #c36e55;
+  border-color: #c36e55;
+  transform: translateY(-1px);
+}
+.portal-question-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  color: #17374d;
+  font-size: 12px;
+  font-weight: 700;
+}
+.portal-question-link:hover {
+  color: #d47f62;
+}
+.admin-category-tag {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 4px 7px;
+  background: #edf3ee;
+  color: #526b72;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
 .portal-brand {
   display: flex;
   align-items: center;
@@ -1381,6 +1446,9 @@ h2 span {
   .notes-portal-header, .notes-portal-content { width: calc(100% - 36px); }
   .notes-portal-header { min-height: 72px; }
   .portal-start { gap: 12px; }
+  .portal-tools { gap: 8px; }
+  .portal-question-button { gap: 4px; padding: 9px 8px; font-size: 9px; }
+  .portal-admin { padding: 9px 10px; }
   .portal-back { font-size: 0; }
   .portal-back span { display: none; }
   .portal-back svg { width: 20px; height: 20px; }
@@ -1620,7 +1688,7 @@ h2 span {
     gap: 8px;
   }
   .gallery-tile {
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
   }
   .form-row {
     grid-template-columns: 1fr;

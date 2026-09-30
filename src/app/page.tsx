@@ -138,6 +138,9 @@ export default function Home() {
             <a href="/notes" onClick={() => setMenuOpen(false)}>
               Notes portal
             </a>
+            <a href="/important-questions" onClick={() => setMenuOpen(false)}>
+              Important Questions
+            </a>
             <a href="#contact" onClick={() => setMenuOpen(false)}>
               Contact
             </a>
@@ -403,7 +406,7 @@ export default function Home() {
           <div className="gallery-frame">
             <div className="gallery-frame-heading">
               <span>Classroom moments</span>
-              <span>01 — 04</span>
+              <span>Burari, Delhi</span>
             </div>
             <div className="gallery-grid">
               {gallery.map(([caption, image], index) => (
@@ -539,6 +542,7 @@ export default function Home() {
               <a href="#about">About us</a>
               <a href="#courses">Courses</a>
               <a href="/notes">Study notes</a>
+              <a href="/important-questions">Important Questions</a>
               <a href="/admin">Admin login</a>
             </div>
             <div>
