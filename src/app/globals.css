@@ -540,9 +540,8 @@ h2 span {
   align-items: end;
 }
 .about-image {
-  height: 355px;
-  background: url("/journey-2014-2.jpg")
-    center 18%/cover;
+  aspect-ratio: 3 / 4;
+  background: url("/class-study-session.jpg") center 44%/cover;
   filter: saturate(0.7);
   box-shadow: 0 12px 28px rgba(16, 43, 63, 0.1);
 }
@@ -1436,8 +1435,7 @@ h2 span {
     gap: 32px;
   }
   .about-image {
-    height: 390px;
-    background-position: center 16%;
+    background-position: center 42%;
   }
   .section {
     padding: 82px 0;
