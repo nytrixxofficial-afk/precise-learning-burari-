@@ -1444,10 +1444,24 @@ h2 span {
 .portal-empty { padding: 60px 0; text-align: center; color: #718084; }
 @media (max-width: 700px) {
   .notes-portal-header, .notes-portal-content { width: calc(100% - 36px); }
-  .notes-portal-header { min-height: 72px; }
+  .notes-portal-header {
+    min-height: 72px;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 0;
+  }
   .portal-start { gap: 12px; }
-  .portal-tools { gap: 8px; }
-  .portal-question-button { gap: 4px; padding: 9px 8px; font-size: 9px; }
+  .portal-tools {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .portal-question-button {
+    flex: 1;
+    gap: 4px;
+    padding: 9px 8px;
+    font-size: 9px;
+  }
   .portal-admin { padding: 9px 10px; }
   .portal-back { font-size: 0; }
   .portal-back span { display: none; }
