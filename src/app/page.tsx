@@ -401,6 +401,10 @@ export default function Home() {
             </p>
           </div>
           <div className="gallery-frame">
+            <div className="gallery-frame-heading">
+              <span>Classroom moments</span>
+              <span>01 — 04</span>
+            </div>
             <div className="gallery-grid">
               {gallery.map(([caption, image], index) => (
                 <button
